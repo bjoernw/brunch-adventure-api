@@ -47,7 +47,9 @@ dependencies {
     compile 'org.springframework:spring-core:' + springVersion
     compile 'org.springframework:spring-context-support:' + springVersion
     compile 'org.springframework:spring-tx:' + springVersion
-    //compile 'org.springframework:spring-security:' + springVersion
+//    compile 'org.springframework.security:spring-security-core:3.2.4.RELEASE'
+//    compile 'org.springframework.security:spring-security-web:3.2.4.RELEASE'
+//    compile 'org.springframework.security:spring-security-config:3.2.4.RELEASE'
 
     compile 'org.slf4j:jcl-over-slf4j:1.7.7'
 

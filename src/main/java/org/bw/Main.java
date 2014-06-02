@@ -9,13 +9,16 @@ import com.google.common.collect.ImmutableMultimap;
 import com.sun.jersey.api.client.Client;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.bw.applicationconfig.AppConfiguration;
+import org.bw.auth.CustomAuthenticator;
 import org.bw.client.ConsumerResource;
 import org.bw.controllers.HelloWorldController;
+import org.bw.model.User;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -35,9 +38,6 @@ public class Main extends Application<AppConfiguration>
 		else {
 			new Main().run(new String[]{"server", System.getProperty("dropwizard.config")});
 		}
-
-		ApplicationContext context =
-				new ClassPathXmlApplicationContext("main_context.xml");
 	}
 
 	@Override
@@ -54,6 +54,12 @@ public class Main extends Application<AppConfiguration>
 		env.jersey().register(new HelloWorldController(cfg));
 		Client client = new JerseyClientBuilder(env).using(cfg.getJerseyClientConfiguration()).build("client");
 		env.jersey().register(new ConsumerResource(client));
+
+		ApplicationContext context =
+				new ClassPathXmlApplicationContext("main_context.xml");
+
+		env.jersey().register(new BasicAuthProvider<User>(new CustomAuthenticator(),
+				"SUPER SECRET STUFF"));
 
 		env.admin().addTask(new Task("sometask")
 		{
@@ -92,4 +98,5 @@ public class Main extends Application<AppConfiguration>
 //		environment.getAdminContext().addServlet(holder, "/chat/*");
 //
 //	}
+
 }
